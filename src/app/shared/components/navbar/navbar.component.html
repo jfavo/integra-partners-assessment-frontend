@@ -1,0 +1,18 @@
+<mat-toolbar>
+  <mat-toolbar-row>
+    <button
+      mat-stroked-button
+      (click)="navigateTo('/users-list')"
+      [disabled]="getCurrentUrl() === '/users-list'"
+    >
+      Users
+    </button>
+    <button
+      mat-stroked-button
+      (click)="navigateTo('/create-user')"
+      [disabled]="getCurrentUrl() === '/create-user'"
+    >
+      Create User
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>

@@ -1,0 +1,122 @@
+<div class="form-container">
+  <mat-form-field>
+    <mat-label>Username</mat-label>
+    <input matInput [formControl]="formControls['username']" value={{user?.Username}}>
+
+    <mat-error *ngIf="formControls['username'].hasError('required')">
+        Username is required.
+    </mat-error>
+
+    <mat-error *ngIf="formControls['username'].hasError('minlength')">
+        Username needs to be at least {{minLength}} characters long.
+    </mat-error>
+
+    <mat-error *ngIf="formControls['username'].hasError('maxlength')">
+        Username needs to be at least {{maxLength}} characters long.
+    </mat-error>
+
+    <mat-error *ngIf="formControls['username'].hasError('duplicate')">
+        Username is already in use.
+    </mat-error>
+
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input type="email" matInput [formControl]="formControls['email']" value={{user?.Email}}>
+
+    <mat-error *ngIf="formControls['email'].hasError('required')">
+        Email name is required.
+    </mat-error>
+
+    <mat-error *ngIf="formControls['email'].hasError('email')">
+        Please enter a valid email address
+    </mat-error>
+
+    <mat-error *ngIf="formControls['email'].hasError('duplicate')">
+      Email is already in use.
+  </mat-error>
+
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>First name</mat-label>
+    <input matInput [formControl]="formControls['firstName']" value={{user?.Firstname}}>
+
+    <mat-error *ngIf="formControls['firstName'].hasError('required')">
+        First name is required.
+    </mat-error>
+
+    <mat-error *ngIf="formControls['firstName'].hasError('minlength')">
+        First name needs to be at least {{minLength}} characters long.
+    </mat-error>
+
+    <mat-error *ngIf="formControls['firstName'].hasError('maxlength')">
+        First name needs to be at least {{maxLength}} characters long.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Last name</mat-label>
+    <input matInput [formControl]="formControls['lastName']" value={{user?.Lastname}}>
+
+    <mat-error *ngIf="formControls['lastName'].hasError('required')">
+        Last name is required.
+    </mat-error>
+
+    <mat-error *ngIf="formControls['lastName'].hasError('minlength')">
+        Last name needs to be at least {{minLength}} characters long.
+    </mat-error>
+
+    <mat-error *ngIf="formControls['lastName'].hasError('maxlength')">
+        Last name needs to be at least {{maxLength}} characters long.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Department</mat-label>
+    <input matInput [formControl]="formControls['department']" value={{user?.Department}}>
+
+    <mat-error *ngIf="formControls['department'].hasError('minlength')">
+        Department needs to be at least {{minLength}} characters long.
+    </mat-error>
+
+    <mat-error *ngIf="formControls['department'].hasError('maxlength')">
+        Department needs to be at least {{maxLength}} characters long.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Status</mat-label>
+    <mat-select [(value)]="currentStatus">
+      <mat-option *ngFor="let status of userStatuses" [value]="status.key">
+        {{ status.value }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+</div>
+
+<div class="form-footer">
+
+  <button 
+    mat-raised-button 
+    (click)="onSubmit()"
+    matTooltip="Insert the user data"
+    [disabled]="fetchingFromBackend"
+  >
+    {{user ? "Update" : "Create"}}
+  </button>
+
+  <button
+    *ngIf="allowDelete"
+    mat-fab color="warn" 
+    aria-label="Delete User"
+    matToolTip="Delete the user"
+    [disabled]="fetchingFromBackend"
+    (click)="onDelete()"
+  >
+    <mat-icon>delete</mat-icon>
+  </button>
+
+</div>
