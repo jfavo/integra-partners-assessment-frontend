@@ -3,6 +3,8 @@ import { FormControl, Validators } from '@angular/forms';
 import { User } from '../../models/users.model';
 import { BackendService } from 'src/app/shared/services/backend.service';
 import { USER_STATUSES } from 'src/app/shared/constants/backend-api.constants';
+import { MAX_INPUT_LENGTH, MIN_NAME_LENGTH, MIN_USERNAME_LENGTH } from '../../constnats/form.constants';
+import { DEPARTMENT_MAX_LENGTH_ERROR_MESSAGE, DEPARTMENT_MIN_LENGTH_ERROR_MESSAGE, EMAIL_DUPLICATE_ERROR_MESSAGE, EMAIL_INVALID_ERROR_MESSAGE, EMAIL_REQUIRED_ERROR_MESSAGE, FIRSTNAME_MAX_LENGTH_ERROR_MESSAGE, FIRSTNAME_MIN_LENGTH_ERROR_MESSAGE, FIRSTNAME_REQUIRED_ERROR_MESSAGE, LASTNAME_MAX_LENGTH_ERROR_MESSAGE, LASTNAME_MIN_LENGTH_ERROR_MESSAGE, LASTNAME_REQUIRED_ERROR_MESSAGE, USERNAME_DUPLICATE_ERROR_MESSAGE, USERNAME_MAX_LENGTH_ERROR_MESSAGE, USERNAME_MIN_LENGTH_ERROR_MESSAGE, USERNAME_REQUIRED_ERROR_MESSAGE } from '../../constnats/errors.constants';
 
 @Component({
   selector: 'app-user-form',
@@ -39,28 +41,35 @@ export class UserFormComponent {
   fetchingFromBackend: boolean = false;
 
   /**
-   * Error message for username that may come from the backend so
-   * we can relay it to the user
+   * Object containing all form error messages to be sent to the client
    */
-  usernameBackendError: string = '';
-  /**
-   * Error message for email that may come from the backend so
-   * we can relay it to the user
-   */
-  emailBackendError: string = '';
-
-  /**
-   * Minimum length for our form inputs
-   */
-  minLength: number = 3;
-  /**
-   * Minimum length for our name and department form inputs
-   */
-  smallMinLength: number = 1;
-  /**
-   * Maximum length for our form inputs
-   */
-  maxLength: number = 15;
+  errorMessages = {
+    "username": {
+      "required": USERNAME_REQUIRED_ERROR_MESSAGE,
+      "minlength": USERNAME_MIN_LENGTH_ERROR_MESSAGE,
+      "maxlength": USERNAME_MAX_LENGTH_ERROR_MESSAGE,
+      "duplicate": USERNAME_DUPLICATE_ERROR_MESSAGE,
+    },
+    "email": {
+      "required": EMAIL_REQUIRED_ERROR_MESSAGE,
+      "pattern": EMAIL_INVALID_ERROR_MESSAGE,
+      "duplicate": EMAIL_DUPLICATE_ERROR_MESSAGE,
+    },
+    "firstName": {
+      "required":  FIRSTNAME_REQUIRED_ERROR_MESSAGE,
+      "minlength": FIRSTNAME_MIN_LENGTH_ERROR_MESSAGE,
+      "maxlength": FIRSTNAME_MAX_LENGTH_ERROR_MESSAGE,
+    },
+    "lastName": {
+      "required":  LASTNAME_REQUIRED_ERROR_MESSAGE,
+      "minlength": LASTNAME_MIN_LENGTH_ERROR_MESSAGE,
+      "maxlength": LASTNAME_MAX_LENGTH_ERROR_MESSAGE,
+    },
+    "department": {
+      "minlength": DEPARTMENT_MIN_LENGTH_ERROR_MESSAGE,
+      "maxlength": DEPARTMENT_MAX_LENGTH_ERROR_MESSAGE,
+    },
+  }
 
   /**
    * Key value pair collection containing our form input FormControls
@@ -68,8 +77,8 @@ export class UserFormComponent {
   formControls: { [key: string]: FormControl<any>} = {
     "username": new FormControl('', [
       Validators.required,
-      Validators.minLength(this.minLength),
-      Validators.maxLength(this.maxLength),
+      Validators.minLength(MIN_USERNAME_LENGTH),
+      Validators.maxLength(MAX_INPUT_LENGTH),
     ]),
     "email": new FormControl('', [
       Validators.required,
@@ -78,17 +87,17 @@ export class UserFormComponent {
     ]),
     "firstName": new FormControl('', [
       Validators.required,
-      Validators.minLength(this.smallMinLength),
-      Validators.maxLength(this.maxLength),
+      Validators.minLength(MIN_NAME_LENGTH),
+      Validators.maxLength(MAX_INPUT_LENGTH),
     ]),
     "lastName": new FormControl('', [
       Validators.required,
-      Validators.minLength(this.smallMinLength),
-      Validators.maxLength(this.maxLength),
+      Validators.minLength(MIN_NAME_LENGTH),
+      Validators.maxLength(MAX_INPUT_LENGTH),
     ]),
     "department": new FormControl('', [
-      Validators.minLength(this.smallMinLength),
-      Validators.maxLength(this.maxLength),
+      Validators.minLength(MIN_NAME_LENGTH),
+      Validators.maxLength(MAX_INPUT_LENGTH),
     ])
   }
 

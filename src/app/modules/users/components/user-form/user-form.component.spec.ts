@@ -13,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TEST_USERS } from 'src/app/shared/constants/test-data.constants';
 import { By } from '@angular/platform-browser';
+import { EMAIL_INVALID_ERROR_MESSAGE, USERNAME_MAX_LENGTH_ERROR_MESSAGE, USERNAME_MIN_LENGTH_ERROR_MESSAGE, USERNAME_REQUIRED_ERROR_MESSAGE } from '../../constnats/errors.constants';
 
 describe('UserFormComponent', () => {
   let component: UserFormComponent;
@@ -171,7 +172,7 @@ describe('UserFormComponent', () => {
 
     const errorMessageDebugElement = fixture.debugElement.query(By.css('#username-required-error'));
     expect(errorMessageDebugElement).toBeTruthy();
-    expect(errorMessageDebugElement.nativeElement.textContent).toContain('Username is required.');
+    expect(errorMessageDebugElement.nativeElement.textContent).toContain(USERNAME_REQUIRED_ERROR_MESSAGE);
   });
 
   it('should display error message when username is too short', () => {
@@ -184,7 +185,7 @@ describe('UserFormComponent', () => {
 
     const errorMessage = fixture.nativeElement.querySelector('#username-minlength-error');
     expect(errorMessage).toBeTruthy();
-    expect(errorMessage.textContent).toContain(`Username needs to be at least 3 characters long`);
+    expect(errorMessage.textContent).toContain(USERNAME_MIN_LENGTH_ERROR_MESSAGE);
   });
 
   it('should display error message when username is too long', () => {
@@ -197,7 +198,7 @@ describe('UserFormComponent', () => {
 
     const errorMessage = fixture.nativeElement.querySelector('#username-maxlength-error');
     expect(errorMessage).toBeTruthy();
-    expect(errorMessage.textContent).toContain(`Username needs to be at most 15 characters long`);
+    expect(errorMessage.textContent).toContain(USERNAME_MAX_LENGTH_ERROR_MESSAGE);
   });
 
   it('should validate bad email properly', () => {
@@ -210,7 +211,7 @@ describe('UserFormComponent', () => {
 
     const errorMessage = fixture.nativeElement.querySelector('#email-pattern-error');
     expect(errorMessage).toBeTruthy();
-    expect(errorMessage.textContent).toContain('Please enter a valid email address');
+    expect(errorMessage.textContent).toContain(EMAIL_INVALID_ERROR_MESSAGE);
   });
 
   it('should validate good email properly', () => {

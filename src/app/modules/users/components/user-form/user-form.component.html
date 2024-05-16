@@ -12,28 +12,28 @@
       *ngIf="formControls['username'].hasError('required')"
       id="username-required-error"
     >
-      Username is required.
+      {{ errorMessages["username"]["required"] }}
     </mat-error>
 
     <mat-error
       *ngIf="formControls['username'].hasError('minlength')"
       id="username-minlength-error"
     >
-      Username needs to be at least {{ minLength }} characters long.
+      {{ errorMessages["username"]["minlength"] }}
     </mat-error>
 
     <mat-error
       *ngIf="formControls['username'].hasError('maxlength')"
       id="username-maxlength-error"
     >
-      Username needs to be at most {{ maxLength }} characters long.
+      {{ errorMessages["username"]["maxlength"] }}
     </mat-error>
 
     <mat-error
       *ngIf="formControls['username'].hasError('duplicate')"
       id="username-duplicate-error"
     >
-      Username is already in use.
+      {{ errorMessages["username"]["duplicate"] }}
     </mat-error>
   </mat-form-field>
 
@@ -51,21 +51,21 @@
       *ngIf="formControls['email'].hasError('required')"
       id="email-required-error"
     >
-      Email name is required.
+      {{ errorMessages["email"]["required"] }}
     </mat-error>
 
     <mat-error
       *ngIf="formControls['email'].hasError('pattern')"
       id="email-pattern-error"
     >
-      Please enter a valid email address
+      {{ errorMessages["email"]["pattern"] }}
     </mat-error>
 
     <mat-error
       *ngIf="formControls['email'].hasError('duplicate')"
       id="email-duplicate-error"
     >
-      Email is already in use.
+      {{ errorMessages["email"]["duplicate"] }}
     </mat-error>
   </mat-form-field>
 
@@ -82,21 +82,21 @@
       *ngIf="formControls['firstName'].hasError('required')"
       id="first-name-required-error"
     >
-      First name is required.
+      {{ errorMessages["firstName"]["required"] }}
     </mat-error>
 
     <mat-error
       *ngIf="formControls['firstName'].hasError('minlength')"
       id="first-name-minlength-error"
     >
-      First name needs to be at least {{ minLength }} characters long.
+      {{ errorMessages["firstName"]["minlength"] }}
     </mat-error>
 
     <mat-error
       *ngIf="formControls['firstName'].hasError('maxlength')"
       id="first-name-maxlength-error"
     >
-      First name needs to be at most {{ maxLength }} characters long.
+      {{ errorMessages["firstName"]["maxlength"] }}
     </mat-error>
   </mat-form-field>
 
@@ -113,21 +113,21 @@
       *ngIf="formControls['lastName'].hasError('required')"
       id="last-name-required-error"
     >
-      Last name is required.
+      {{ errorMessages["lastName"]["required"] }}
     </mat-error>
 
     <mat-error
       *ngIf="formControls['lastName'].hasError('minlength')"
       id="last-name-minlength-error"
     >
-      Last name needs to be at least {{ minLength }} characters long.
+      {{ errorMessages["lastName"]["minlength"] }}
     </mat-error>
 
     <mat-error
       *ngIf="formControls['lastName'].hasError('maxlength')"
       id="last-name-maxlength-error"
     >
-      Last name needs to be at most {{ maxLength }} characters long.
+      {{ errorMessages["lastName"]["maxlength"] }}
     </mat-error>
   </mat-form-field>
 
@@ -144,14 +144,14 @@
       *ngIf="formControls['department'].hasError('minlength')"
       id="department-minlength-error"
     >
-      Department needs to be at least {{ minLength }} characters long.
+      {{ errorMessages["department"]["minlength"] }}
     </mat-error>
 
     <mat-error
       *ngIf="formControls['department'].hasError('maxlength')"
       id="department-maxlength-error"
     >
-      Department needs to be at most {{ maxLength }} characters long.
+      {{ errorMessages["department"]["maxlength"] }}
     </mat-error>
   </mat-form-field>
 
