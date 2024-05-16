@@ -184,7 +184,7 @@ describe('UserFormComponent', () => {
 
     const errorMessage = fixture.nativeElement.querySelector('#username-minlength-error');
     expect(errorMessage).toBeTruthy();
-    expect(errorMessage.textContent).toContain('Username needs to be at least');
+    expect(errorMessage.textContent).toContain(`Username needs to be at least 3 characters long`);
   });
 
   it('should display error message when username is too long', () => {
@@ -197,6 +197,31 @@ describe('UserFormComponent', () => {
 
     const errorMessage = fixture.nativeElement.querySelector('#username-maxlength-error');
     expect(errorMessage).toBeTruthy();
-    expect(errorMessage.textContent).toContain('Username needs to be at most');
+    expect(errorMessage.textContent).toContain(`Username needs to be at most 15 characters long`);
+  });
+
+  it('should validate bad email properly', () => {
+    const emailInput = fixture.nativeElement.querySelector('#email-input');
+    emailInput.value = 'bad@e'; // Invalid email
+    emailInput.dispatchEvent(new Event('input'));
+    emailInput.dispatchEvent(new Event('blur'));
+
+    fixture.detectChanges();
+
+    const errorMessage = fixture.nativeElement.querySelector('#email-pattern-error');
+    expect(errorMessage).toBeTruthy();
+    expect(errorMessage.textContent).toContain('Please enter a valid email address');
+  });
+
+  it('should validate good email properly', () => {
+    const emailInput = fixture.nativeElement.querySelector('#email-input');
+    emailInput.value = 'good@email.com';
+    emailInput.dispatchEvent(new Event('input'));
+    emailInput.dispatchEvent(new Event('blur'));
+
+    fixture.detectChanges();
+
+    const errorMessage = fixture.nativeElement.querySelector('#email-pattern-error');
+    expect(errorMessage).toBeFalsy();
   });
 });
