@@ -13,7 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TEST_USERS } from 'src/app/shared/constants/test-data.constants';
 import { By } from '@angular/platform-browser';
-import { EMAIL_INVALID_ERROR_MESSAGE, USERNAME_MAX_LENGTH_ERROR_MESSAGE, USERNAME_MIN_LENGTH_ERROR_MESSAGE, USERNAME_REQUIRED_ERROR_MESSAGE } from '../../constnats/errors.constants';
+import { EMAIL_INVALID_ERROR_MESSAGE, USERNAME_MAX_LENGTH_ERROR_MESSAGE, USERNAME_MIN_LENGTH_ERROR_MESSAGE, USERNAME_REQUIRED_ERROR_MESSAGE } from '../../constants/errors.constants';
 
 describe('UserFormComponent', () => {
   let component: UserFormComponent;
