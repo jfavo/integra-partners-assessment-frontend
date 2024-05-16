@@ -1,28 +1,43 @@
 <div class="container" *ngIf="users">
-    <div class="list-header">
-        <h1>Current users</h1>
-    </div>
-    <div class="list-container">
-        <mat-spinner class="user-loading-spinner" *ngIf="fetchingFromBackend"></mat-spinner>
-        <mat-accordion multi>
-            <mat-expansion-panel class="expansion-container" *ngFor="let user of users">
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        {{user.Username}}
-                    </mat-panel-title>
-                    <mat-panel-description>
-                        {{user.Email}}
-                    </mat-panel-description>
-                </mat-expansion-panel-header>
-            
-                <app-user-form
-                    [user]="user"
-                    [allowDelete]="true"
-                    (userUpdatedEvent)="onUserUpdated($event)"
-                    (userDeletedEvent)="onUserDeleted($event)">
-                </app-user-form>
-            
-            </mat-expansion-panel>
-        </mat-accordion>
-    </div>
+  <div class="list-header">
+    <h1>Current users</h1>
+  </div>
+  <div class="list-container">
+    <mat-spinner
+      class="user-loading-spinner"
+      *ngIf="fetchingFromBackend"
+    ></mat-spinner>
+
+    <mat-accordion displayMode="flat">
+      <section
+        *ngIf="!fetchingFromBackend"
+        class="mat-elevation-z2 mat-header-row"
+      >
+        <span class="mat-header-cell">Username</span>
+        <span class="mat-header-cell">Email</span>
+        <span class="mat-header-cell">Status</span>
+        <span class="mat-header-cell">Department</span>
+      </section>
+
+      <mat-expansion-panel
+        class="expansion-container"
+        *ngFor="let user of users"
+      >
+        <mat-expansion-panel-header>
+          <span class="mat-cell">{{ user.Username }}</span>
+          <span class="mat-cell">{{ user.Email }}</span>
+          <span class="mat-cell">{{ getUserStatus(user.UserStatus) }}</span>
+          <span class="mat-cell">{{ user.Department }}</span>
+        </mat-expansion-panel-header>
+
+        <app-user-form
+          [user]="user"
+          [allowDelete]="true"
+          (userUpdatedEvent)="onUserUpdated($event)"
+          (userDeletedEvent)="onUserDeleted($event)"
+        >
+        </app-user-form>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
 </div>

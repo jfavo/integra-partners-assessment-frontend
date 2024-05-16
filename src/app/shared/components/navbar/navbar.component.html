@@ -1,6 +1,7 @@
 <mat-toolbar>
   <mat-toolbar-row>
     <button
+      id="users-list-button"
       mat-stroked-button
       (click)="navigateTo('/users-list')"
       [disabled]="getCurrentUrl() === '/users-list'"
@@ -8,6 +9,7 @@
       Users
     </button>
     <button
+      id="create-user-button"
       mat-stroked-button
       (click)="navigateTo('/create-user')"
       [disabled]="getCurrentUrl() === '/create-user'"

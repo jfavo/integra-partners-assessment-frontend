@@ -1,116 +1,190 @@
 <div class="form-container">
   <mat-form-field>
     <mat-label>Username</mat-label>
-    <input matInput [formControl]="formControls['username']" value={{user?.Username}}>
+    <input
+      matInput
+      [formControl]="formControls['username']"
+      value="{{ user?.Username }}"
+      id="username-input"
+    />
 
-    <mat-error *ngIf="formControls['username'].hasError('required')">
-        Username is required.
+    <mat-error
+      *ngIf="formControls['username'].hasError('required')"
+      id="username-required-error"
+    >
+      Username is required.
     </mat-error>
 
-    <mat-error *ngIf="formControls['username'].hasError('minlength')">
-        Username needs to be at least {{minLength}} characters long.
+    <mat-error
+      *ngIf="formControls['username'].hasError('minlength')"
+      id="username-minlength-error"
+    >
+      Username needs to be at least {{ minLength }} characters long.
     </mat-error>
 
-    <mat-error *ngIf="formControls['username'].hasError('maxlength')">
-        Username needs to be at least {{maxLength}} characters long.
+    <mat-error
+      *ngIf="formControls['username'].hasError('maxlength')"
+      id="username-maxlength-error"
+    >
+      Username needs to be at most {{ maxLength }} characters long.
     </mat-error>
 
-    <mat-error *ngIf="formControls['username'].hasError('duplicate')">
-        Username is already in use.
+    <mat-error
+      *ngIf="formControls['username'].hasError('duplicate')"
+      id="username-duplicate-error"
+    >
+      Username is already in use.
     </mat-error>
-
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>Email</mat-label>
-    <input type="email" matInput [formControl]="formControls['email']" value={{user?.Email}}>
+    <input
+      type="email"
+      matInput
+      [formControl]="formControls['email']"
+      value="{{ user?.Email }}"
+      id="email-input"
+    />
 
-    <mat-error *ngIf="formControls['email'].hasError('required')">
-        Email name is required.
+    <mat-error
+      *ngIf="formControls['email'].hasError('required')"
+      id="email-required-error"
+    >
+      Email name is required.
     </mat-error>
 
-    <mat-error *ngIf="formControls['email'].hasError('email')">
-        Please enter a valid email address
+    <mat-error
+      *ngIf="formControls['email'].hasError('pattern')"
+      id="email-pattern-error"
+    >
+      Please enter a valid email address
     </mat-error>
 
-    <mat-error *ngIf="formControls['email'].hasError('duplicate')">
+    <mat-error
+      *ngIf="formControls['email'].hasError('duplicate')"
+      id="email-duplicate-error"
+    >
       Email is already in use.
-  </mat-error>
-
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>First name</mat-label>
-    <input matInput [formControl]="formControls['firstName']" value={{user?.Firstname}}>
+    <input
+      matInput
+      [formControl]="formControls['firstName']"
+      value="{{ user?.Firstname }}"
+      id="first-name-input"
+    />
 
-    <mat-error *ngIf="formControls['firstName'].hasError('required')">
-        First name is required.
+    <mat-error
+      *ngIf="formControls['firstName'].hasError('required')"
+      id="first-name-required-error"
+    >
+      First name is required.
     </mat-error>
 
-    <mat-error *ngIf="formControls['firstName'].hasError('minlength')">
-        First name needs to be at least {{minLength}} characters long.
+    <mat-error
+      *ngIf="formControls['firstName'].hasError('minlength')"
+      id="first-name-minlength-error"
+    >
+      First name needs to be at least {{ minLength }} characters long.
     </mat-error>
 
-    <mat-error *ngIf="formControls['firstName'].hasError('maxlength')">
-        First name needs to be at least {{maxLength}} characters long.
+    <mat-error
+      *ngIf="formControls['firstName'].hasError('maxlength')"
+      id="first-name-maxlength-error"
+    >
+      First name needs to be at most {{ maxLength }} characters long.
     </mat-error>
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>Last name</mat-label>
-    <input matInput [formControl]="formControls['lastName']" value={{user?.Lastname}}>
+    <input
+      matInput
+      [formControl]="formControls['lastName']"
+      value="{{ user?.Lastname }}"
+      id="last-name-input"
+    />
 
-    <mat-error *ngIf="formControls['lastName'].hasError('required')">
-        Last name is required.
+    <mat-error
+      *ngIf="formControls['lastName'].hasError('required')"
+      id="last-name-required-error"
+    >
+      Last name is required.
     </mat-error>
 
-    <mat-error *ngIf="formControls['lastName'].hasError('minlength')">
-        Last name needs to be at least {{minLength}} characters long.
+    <mat-error
+      *ngIf="formControls['lastName'].hasError('minlength')"
+      id="last-name-minlength-error"
+    >
+      Last name needs to be at least {{ minLength }} characters long.
     </mat-error>
 
-    <mat-error *ngIf="formControls['lastName'].hasError('maxlength')">
-        Last name needs to be at least {{maxLength}} characters long.
+    <mat-error
+      *ngIf="formControls['lastName'].hasError('maxlength')"
+      id="last-name-maxlength-error"
+    >
+      Last name needs to be at most {{ maxLength }} characters long.
     </mat-error>
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>Department</mat-label>
-    <input matInput [formControl]="formControls['department']" value={{user?.Department}}>
+    <input
+      matInput
+      [formControl]="formControls['department']"
+      value="{{ user?.Department }}"
+      id="department-input"
+    />
 
-    <mat-error *ngIf="formControls['department'].hasError('minlength')">
-        Department needs to be at least {{minLength}} characters long.
+    <mat-error
+      *ngIf="formControls['department'].hasError('minlength')"
+      id="department-minlength-error"
+    >
+      Department needs to be at least {{ minLength }} characters long.
     </mat-error>
 
-    <mat-error *ngIf="formControls['department'].hasError('maxlength')">
-        Department needs to be at least {{maxLength}} characters long.
+    <mat-error
+      *ngIf="formControls['department'].hasError('maxlength')"
+      id="department-maxlength-error"
+    >
+      Department needs to be at most {{ maxLength }} characters long.
     </mat-error>
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>Status</mat-label>
-    <mat-select [(value)]="currentStatus">
-      <mat-option *ngFor="let status of userStatuses" [value]="status.key">
+    <mat-select [(value)]="currentStatus" id="status-select">
+      <mat-option
+        *ngFor="let status of userStatuses"
+        [value]="status.key"
+        id="{{ status.key }}-option"
+      >
         {{ status.value }}
       </mat-option>
     </mat-select>
   </mat-form-field>
-
 </div>
 
 <div class="form-footer">
-
-  <button 
-    mat-raised-button 
+  <button
+    id="create-update-button"
+    mat-raised-button
     (click)="onSubmit()"
     matTooltip="Insert the user data"
     [disabled]="fetchingFromBackend"
   >
-    {{user ? "Update" : "Create"}}
+    {{ user ? "Update" : "Create" }}
   </button>
 
   <button
+    id="delete-button"
     *ngIf="allowDelete"
-    mat-fab color="warn" 
+    mat-fab
+    color="warn"
     aria-label="Delete User"
     matToolTip="Delete the user"
     [disabled]="fetchingFromBackend"
@@ -118,5 +192,4 @@
   >
     <mat-icon>delete</mat-icon>
   </button>
-
 </div>

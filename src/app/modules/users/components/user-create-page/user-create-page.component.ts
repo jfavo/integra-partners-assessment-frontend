@@ -15,7 +15,7 @@ export class UserCreatePageComponent {
    * Handler to be called once the user form returns a new user
    * @param user User data that was recently created
    */
-  onUserCreated(user: User): void {
+  onUserCreated(): void {
     this.router.navigateByUrl('/users-list');
   }
 }
