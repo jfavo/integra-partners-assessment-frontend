@@ -18,7 +18,6 @@ import { NavbarComponent } from './shared/components/navbar/navbar.component';
     UsersModule,
     BrowserAnimationsModule,
     RouterOutlet,
-    MatToolbarModule,
     NavbarComponent
   ],
   providers: [],

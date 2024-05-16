@@ -74,7 +74,7 @@ export class UserFormComponent {
     "email": new FormControl('', [
       Validators.required,
       // Using regex instead of the built in email validator for better accuracy
-      Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$"),
+      Validators.pattern("^[a-zA-Z0-9._-]+@[a-z0-9-]+\\.[a-z]{2,4}$"),
     ]),
     "firstName": new FormControl('', [
       Validators.required,
