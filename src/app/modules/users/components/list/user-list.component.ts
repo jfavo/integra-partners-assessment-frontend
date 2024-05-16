@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { BackendService } from 'src/app/shared/services/backend.service';
 import { User } from '../../models/users.model';
+import { USER_STATUSES } from 'src/app/shared/constants/backend-api.constants';
 
 @Component({
   selector: 'app-user-list',
@@ -8,6 +9,7 @@ import { User } from '../../models/users.model';
   styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent {
+
   /**
    * Collection of users supplied from the backend
    */
@@ -64,4 +66,12 @@ export class UserListComponent {
     this.users = this.users.filter(u => u.UserId !== userId);
   }
 
+  /**
+   * Returns the status for the specified status key
+   * @param statusKey Character key for the status
+   * @returns Status string
+   */
+  getUserStatus(statusKey: string) : string | undefined { 
+    return USER_STATUSES.find(s => s.key === statusKey)?.value
+  }
 }

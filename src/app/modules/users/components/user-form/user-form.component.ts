@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { User } from '../../models/users.model';
-import { UserStatus } from '../../models/user-status.model';
 import { BackendService } from 'src/app/shared/services/backend.service';
+import { USER_STATUSES } from 'src/app/shared/constants/backend-api.constants';
 
 @Component({
   selector: 'app-user-form',
@@ -54,9 +54,9 @@ export class UserFormComponent {
    */
   minLength: number = 3;
   /**
-   * Minimum length for our name form inputs
+   * Minimum length for our name and department form inputs
    */
-  nameMinLength: number = 1;
+  smallMinLength: number = 1;
   /**
    * Maximum length for our form inputs
    */
@@ -73,32 +73,29 @@ export class UserFormComponent {
     ]),
     "email": new FormControl('', [
       Validators.required,
-      Validators.email,
+      // Using regex instead of the built in email validator for better accuracy
+      Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$"),
     ]),
     "firstName": new FormControl('', [
       Validators.required,
-      Validators.minLength(this.nameMinLength),
+      Validators.minLength(this.smallMinLength),
       Validators.maxLength(this.maxLength),
     ]),
     "lastName": new FormControl('', [
       Validators.required,
-      Validators.minLength(this.nameMinLength),
+      Validators.minLength(this.smallMinLength),
       Validators.maxLength(this.maxLength),
     ]),
     "department": new FormControl('', [
-      Validators.minLength(this.minLength),
+      Validators.minLength(this.smallMinLength),
       Validators.maxLength(this.maxLength),
     ])
   }
 
   /**
-   * List of valid user statuses for the user
+   * Getter to retrieve the collection of valid User Statuses
    */
-  readonly userStatuses: UserStatus[] = [
-    { key: 'A', value: 'Active' },
-    { key: 'I', value: 'Inactive' },
-    { key: 'T', value: 'Terminated' },
-  ];
+  get userStatuses() { return USER_STATUSES; }
 
   /**
    * Stores the UserStatus of our user so we can pre-select it
@@ -132,7 +129,6 @@ export class UserFormComponent {
         const id = this.user.UserId;
         this.backendService.deleteUser(id).subscribe({
           next: deleted => {
-            console.log(deleted);
             if (deleted) {
               this.userDeletedEvent.emit(id)
             }
@@ -152,18 +148,18 @@ export class UserFormComponent {
   onSubmit(): void {
     // Ensure that our user data is valid
     if (!this.validateUserData()) {
-      console.error(`Some user data is invalid.`)
       return;
     }
+
+    // Map our data to a User object
+    const userData = this.mapFormDataToUser();
+    if (!userData) return;
+
+    this.fetchingFromBackend = true;
 
     // Determine if we are updating an existing user
     // or creating a new one
     const updating = this.user !== undefined;
-
-    this.fetchingFromBackend = true;
-
-    const userData = this.mapFormDataToUser();
-    if (!userData) return;
 
     if (updating) {
       this.backendService.updateUser(userData).subscribe({
@@ -207,7 +203,6 @@ export class UserFormComponent {
       }
     }
 
-    console.log(err, this.usernameBackendError, this.emailBackendError);
     this.fetchingFromBackend = false;
   }
 
