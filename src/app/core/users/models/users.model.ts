@@ -24,12 +24,4 @@ export class User {
     this.UserStatus = userStatus;
     this.Department = department;
   }
-
-  /**
-   * Creates a new empty User object
-   * @returns An empty User object
-   */
-  public static EmptyUser(): User {
-    return new User(0, "", "", "", "", "", "");
-  }
 }

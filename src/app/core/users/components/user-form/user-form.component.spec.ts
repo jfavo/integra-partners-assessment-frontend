@@ -13,7 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TEST_USERS } from 'src/app/shared/constants/test-data.constants';
 import { By } from '@angular/platform-browser';
-import { EMAIL_INVALID_ERROR_MESSAGE, USERNAME_MAX_LENGTH_ERROR_MESSAGE, USERNAME_MIN_LENGTH_ERROR_MESSAGE, USERNAME_REQUIRED_ERROR_MESSAGE } from '../../constants/errors.constants';
+import { EMAIL_INVALID_ERROR_MESSAGE, EMAIL_REQUIRED_ERROR_MESSAGE, USERNAME_MAX_LENGTH_ERROR_MESSAGE, USERNAME_MIN_LENGTH_ERROR_MESSAGE, USERNAME_REQUIRED_ERROR_MESSAGE } from '../../constants/errors.constants';
 
 describe('UserFormComponent', () => {
   let component: UserFormComponent;
@@ -107,7 +107,7 @@ describe('UserFormComponent', () => {
 
   it('should set username error when backend service returns duplicate username error', () => {
     const errorResponse = { error: { error_code: 10003 } };
-    backendServiceSpy.updateUser.and.returnValue(throwError(errorResponse));
+    backendServiceSpy.updateUser.and.returnValue(throwError(() => errorResponse));
 
     component.onSubmit();
 
@@ -153,7 +153,7 @@ describe('UserFormComponent', () => {
     component.user = testUser;
   
     spyOn(window, 'confirm').and.returnValue(true);
-    const deleteObservable = of(false); // Assume deletion failed
+    const deleteObservable = of(false);
     backendServiceSpy.deleteUser.and.returnValue(deleteObservable);
     spyOn(component.userDeletedEvent, 'emit');
   
@@ -162,67 +162,64 @@ describe('UserFormComponent', () => {
     expect(component.userDeletedEvent.emit).not.toHaveBeenCalled();
   });
 
-  it('should display error message when username is not provided', () => {
-    const usernameInput = fixture.debugElement.query(By.css('#username-input')).nativeElement;
-    usernameInput.value = ''; // Simulate empty input
-    usernameInput.dispatchEvent(new Event('input'));
-    usernameInput.dispatchEvent(new Event('blur'));
-
-    fixture.detectChanges();
-
-    const errorMessageDebugElement = fixture.debugElement.query(By.css('#username-required-error'));
-    expect(errorMessageDebugElement).toBeTruthy();
-    expect(errorMessageDebugElement.nativeElement.textContent).toContain(USERNAME_REQUIRED_ERROR_MESSAGE);
-  });
-
-  it('should display error message when username is too short', () => {
-    const usernameInput = fixture.nativeElement.querySelector('#username-input');
-    usernameInput.value = 'ab'; // Simulate short input
-    usernameInput.dispatchEvent(new Event('input'));
-    usernameInput.dispatchEvent(new Event('blur'));
-
-    fixture.detectChanges();
-
-    const errorMessage = fixture.nativeElement.querySelector('#username-minlength-error');
-    expect(errorMessage).toBeTruthy();
-    expect(errorMessage.textContent).toContain(USERNAME_MIN_LENGTH_ERROR_MESSAGE);
-  });
-
-  it('should display error message when username is too long', () => {
-    const usernameInput = fixture.nativeElement.querySelector('#username-input');
-    usernameInput.value = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit'; // Simulate long input
-    usernameInput.dispatchEvent(new Event('input'));
-    usernameInput.dispatchEvent(new Event('blur'));
-
-    fixture.detectChanges();
-
-    const errorMessage = fixture.nativeElement.querySelector('#username-maxlength-error');
-    expect(errorMessage).toBeTruthy();
-    expect(errorMessage.textContent).toContain(USERNAME_MAX_LENGTH_ERROR_MESSAGE);
-  });
-
-  it('should validate bad email properly', () => {
-    const emailInput = fixture.nativeElement.querySelector('#email-input');
-    emailInput.value = 'bad@e'; // Invalid email
-    emailInput.dispatchEvent(new Event('input'));
-    emailInput.dispatchEvent(new Event('blur'));
-
-    fixture.detectChanges();
-
-    const errorMessage = fixture.nativeElement.querySelector('#email-pattern-error');
-    expect(errorMessage).toBeTruthy();
-    expect(errorMessage.textContent).toContain(EMAIL_INVALID_ERROR_MESSAGE);
-  });
-
-  it('should validate good email properly', () => {
-    const emailInput = fixture.nativeElement.querySelector('#email-input');
-    emailInput.value = 'good@email.com';
-    emailInput.dispatchEvent(new Event('input'));
-    emailInput.dispatchEvent(new Event('blur'));
-
-    fixture.detectChanges();
-
-    const errorMessage = fixture.nativeElement.querySelector('#email-pattern-error');
-    expect(errorMessage).toBeFalsy();
-  });
+  describe('input form validation cases', () => {
+    for (const {inputField, inputElemId, inputVal, errorElemId, expectedErrorMessage, errorType} of [
+      // Username error validations
+      { 
+        inputField: 'username',
+        inputElemId: '#username-input',
+        inputVal: '',
+        errorElemId: '#username-required-error',
+        expectedErrorMessage: USERNAME_REQUIRED_ERROR_MESSAGE,
+        errorType: 'input is not supplied'
+      },
+      { 
+        inputField: 'username',
+        inputElemId: '#username-input',
+        inputVal: 'q',
+        errorElemId: '#username-minlength-error',
+        expectedErrorMessage: USERNAME_MIN_LENGTH_ERROR_MESSAGE,
+        errorType: 'input is too short'
+      },
+      { 
+        inputField: 'username',
+        inputElemId: '#username-input',
+        inputVal: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        errorElemId: '#username-maxlength-error',
+        expectedErrorMessage: USERNAME_MAX_LENGTH_ERROR_MESSAGE,
+        errorType: 'input is too long'
+      },
+      // Email error validations
+      { 
+        inputField: 'email',
+        inputElemId: '#email-input',
+        inputVal: '',
+        errorElemId: '#email-required-error',
+        expectedErrorMessage: EMAIL_REQUIRED_ERROR_MESSAGE,
+        errorType: 'input is not supplied'
+      },
+      { 
+        inputField: 'email',
+        inputElemId: '#email-input',
+        inputVal: 'bad@e',
+        errorElemId: '#email-pattern-error',
+        expectedErrorMessage: EMAIL_INVALID_ERROR_MESSAGE,
+        errorType: 'input is not valid'
+      },
+      // We can add the test cases for First name, last name, etc similar to above...
+    ]) {
+      it(`${inputField} should return error message ${expectedErrorMessage} when ${errorType}`, () => {
+        const inputElem = fixture.debugElement.query(By.css(inputElemId)).nativeElement;
+        inputElem.value = inputVal;
+        inputElem.dispatchEvent(new Event('input'));
+        inputElem.dispatchEvent(new Event('blur'));
+        
+        fixture.detectChanges();
+    
+        const errorMessageDebugElement = fixture.debugElement.query(By.css(errorElemId));
+        expect(errorMessageDebugElement).toBeTruthy();
+        expect(errorMessageDebugElement.nativeElement.textContent).toContain(expectedErrorMessage);
+      })
+    }
+  })
 });

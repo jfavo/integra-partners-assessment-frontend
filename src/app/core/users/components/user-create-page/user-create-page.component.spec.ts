@@ -45,8 +45,6 @@ describe('UserCreatePageComponent', () => {
   });
 
   it('should navigate to users list when user is created', () => {
-    const user = TEST_USERS[0];
-
     // Trigger the method with the user data
     component.onUserCreated();
 

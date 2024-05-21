@@ -1,4 +1,4 @@
-import { UserStatus } from "src/app/modules/users/models/user-status.model";
+import { UserStatus } from "src/app/core/users/models/user-status.model";
 
 export const BACKEND_API_URL: string = 'http://localhost:8080';
 export const BACKEND_API_USERS_PATH: string = `${BACKEND_API_URL}/users`;

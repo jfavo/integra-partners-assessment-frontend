@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { BackendService } from './backend.service';
-import { User } from '../../modules/users/models/users.model';
+import { User } from '../../core/users/models/users.model';
 import { BACKEND_API_USERS_PATH } from '../constants/backend-api.constants';
 import { TEST_USERS } from '../constants/test-data.constants';
 
@@ -33,8 +33,7 @@ describe('BackendService', () => {
     service.getAllUsers().subscribe({
       next: (users) => {
         expect(users.length).toBe(2);
-        expect(users[0].UserId).toBe(testUsers[0].UserId);
-        expect(users[1].Username).toBe(testUsers[1].Username);
+        expect(users).toEqual(testUsers);
         done();
       },
       error: (error) => {

@@ -1,4 +1,4 @@
-import { User } from "src/app/modules/users/models/users.model";
+import { User } from "src/app/core/users/models/users.model";
 
 export const TEST_USERS: User[] = [
     new User(1, 'user1', 'John', 'Doe', 'john@example.com', 'A', 'IT'),
