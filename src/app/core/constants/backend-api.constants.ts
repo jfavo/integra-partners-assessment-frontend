@@ -1,7 +1,7 @@
+import { environment } from "src/environments/environment";
 import { UserStatus } from "../models/user-status.model";
 
-export const BACKEND_API_URL: string = 'http://localhost:8080';
-export const BACKEND_API_USERS_PATH: string = `${BACKEND_API_URL}/users`;
+export const BACKEND_API_USERS_PATH: string = `${environment.backendApiUrl}/users`;
 
   /**
    * List of valid user statuses for the user

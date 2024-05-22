@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NavbarComponent } from './navbar.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
+import { NAV_CREATE_USER_ROUTE, NAV_USERS_LIST_ROUTE } from '../../constants/nav-routes.constants';
 
 describe('NavbarComponent', () => {
   let component: NavbarComponent;
@@ -32,7 +33,7 @@ describe('NavbarComponent', () => {
     userListButton.click();
   
     // Check if navigateTo method is called with the correct URL
-    expect(navigateSpy).toHaveBeenCalledWith('/users-list');
+    expect(navigateSpy).toHaveBeenCalledWith(`/${NAV_USERS_LIST_ROUTE}`);
   });
   
   it('should navigate to create user page', () => {
@@ -41,19 +42,19 @@ describe('NavbarComponent', () => {
     const createUserButton = fixture.nativeElement.querySelector('#create-user-button');
     createUserButton.click();
   
-    expect(navigateSpy).toHaveBeenCalledWith('/create-user');
+    expect(navigateSpy).toHaveBeenCalledWith(`/${NAV_CREATE_USER_ROUTE}`);
   });
 
-  it('should disable users list button when current URL is /users-list', () => {
-    spyOnProperty(router, 'url', 'get').and.returnValue('/users-list');
+  it(`should disable users list button when current URL is /${NAV_USERS_LIST_ROUTE}`, () => {
+    spyOnProperty(router, 'url', 'get').and.returnValue(`/${NAV_USERS_LIST_ROUTE}`);
     fixture.detectChanges();
 
     const userListButton = fixture.nativeElement.querySelector('#users-list-button');
     expect(userListButton.disabled).toBe(true);
   });
 
-  it('should disable create user button when current URL is /create-user', () => {
-    spyOnProperty(router, 'url', 'get').and.returnValue('/create-user');
+  it(`should disable create user button when current URL is /${NAV_CREATE_USER_ROUTE}`, () => {
+    spyOnProperty(router, 'url', 'get').and.returnValue(`/${NAV_CREATE_USER_ROUTE}`);
     fixture.detectChanges();
 
     const createUserButton = fixture.nativeElement.querySelector('#create-user-button');
