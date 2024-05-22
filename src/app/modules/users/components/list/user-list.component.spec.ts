@@ -13,14 +13,18 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { ErrorService } from 'src/app/core/services/errors.service';
+import { BACKEND_API_USERS_FAILED_ACTION, BACKEND_API_USERS_FAILED_MESSAGE } from '../../constants/errors.constants';
 
 describe('UserListComponent', () => {
   let component: UserListComponent;
   let fixture: ComponentFixture<UserListComponent>;
   let backendServiceSpy: jasmine.SpyObj<BackendService>;
+  let errorServiceSpy: jasmine.SpyObj<ErrorService>;
 
   beforeEach(async () => {
-    const spy = jasmine.createSpyObj('BackendService', ['getAllUsers']);
+    const backendSpy = jasmine.createSpyObj('BackendService', ['getAllUsers']);
+    const errorSpy = jasmine.createSpyObj('ErrorService', ['showError'])
     await TestBed.configureTestingModule({
       declarations: [UserListComponent, UserFormComponent],
       imports: [
@@ -32,13 +36,16 @@ describe('UserListComponent', () => {
         FormsModule,
         MatExpansionModule,
         BrowserAnimationsModule,
-        ReactiveFormsModule,
+        ReactiveFormsModule
       ],
-      providers: [{ provide: BackendService, useValue: spy }],
+      providers: [{ provide: BackendService, useValue: backendSpy }, { provide: ErrorService, useValue: errorSpy}],
     }).compileComponents();
     backendServiceSpy = TestBed.inject(
       BackendService
     ) as jasmine.SpyObj<BackendService>;
+    errorServiceSpy = TestBed.inject(
+      ErrorService
+    ) as jasmine.SpyObj<ErrorService>;
   });
 
   beforeEach(() => {
@@ -62,15 +69,19 @@ describe('UserListComponent', () => {
 
   it('should handle error when fetching users from backend', () => {
     const errorSpy = spyOn(console, 'error');
-    const errorMessage = 'Error fetching users';
+    const errorMessage = { message: 'Error fetching users' };
     backendServiceSpy.getAllUsers.and.returnValue(throwError(() => errorMessage));
 
     fixture.detectChanges();
 
     expect(component.users.length).toBe(0);
     expect(component.fetchingFromBackend).toBeFalse();
+    expect(errorServiceSpy.showError).toHaveBeenCalledWith(
+      BACKEND_API_USERS_FAILED_MESSAGE,
+      BACKEND_API_USERS_FAILED_ACTION
+    );
     expect(errorSpy).toHaveBeenCalledWith(
-      `Error while fetching users: ${errorMessage}`
+      `Error while fetching users: ${errorMessage.message}`
     );
   });
 

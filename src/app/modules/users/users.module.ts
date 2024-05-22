@@ -32,7 +32,7 @@ import { UserCreatePageComponent } from './components/user-create-page/user-crea
     MatIconModule,
     FormsModule,
     ReactiveFormsModule,
-    MatProgressSpinnerModule,
+    MatProgressSpinnerModule
   ],
   exports: [
     UserListComponent

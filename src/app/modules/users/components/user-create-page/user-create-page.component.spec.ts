@@ -11,6 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 describe('UserCreatePageComponent', () => {
   let component: UserCreatePageComponent;
@@ -26,7 +27,8 @@ describe('UserCreatePageComponent', () => {
         ReactiveFormsModule,
         MatInputModule,
         NoopAnimationsModule,
-        RouterTestingModule
+        RouterTestingModule,
+        MatSnackBarModule
       ],
       declarations: [UserCreatePageComponent, UserFormComponent],
       providers: [RouterModule, BackendService],

@@ -4,7 +4,8 @@ import { User } from '../../../../core/models/users.model';
 import { BackendService } from '../../../../core/services/backend.service';
 import { USER_STATUSES } from '../../../../core/constants/backend-api.constants';
 import { MAX_INPUT_LENGTH, MIN_NAME_LENGTH, MIN_USERNAME_LENGTH } from '../../constants/form.constants';
-import { DEPARTMENT_MAX_LENGTH_ERROR_MESSAGE, DEPARTMENT_MIN_LENGTH_ERROR_MESSAGE, EMAIL_DUPLICATE_ERROR_MESSAGE, EMAIL_INVALID_ERROR_MESSAGE, EMAIL_REQUIRED_ERROR_MESSAGE, FIRSTNAME_MAX_LENGTH_ERROR_MESSAGE, FIRSTNAME_MIN_LENGTH_ERROR_MESSAGE, FIRSTNAME_REQUIRED_ERROR_MESSAGE, LASTNAME_MAX_LENGTH_ERROR_MESSAGE, LASTNAME_MIN_LENGTH_ERROR_MESSAGE, LASTNAME_REQUIRED_ERROR_MESSAGE, USERNAME_DUPLICATE_ERROR_MESSAGE, USERNAME_MAX_LENGTH_ERROR_MESSAGE, USERNAME_MIN_LENGTH_ERROR_MESSAGE, USERNAME_REQUIRED_ERROR_MESSAGE } from '../../constants/errors.constants';
+import { BACKEND_API_USERS_FAILED_ACTION, BACKEND_API_USERS_FAILED_MESSAGE, DEPARTMENT_MAX_LENGTH_ERROR_MESSAGE, DEPARTMENT_MIN_LENGTH_ERROR_MESSAGE, EMAIL_DUPLICATE_ERROR_MESSAGE, EMAIL_INVALID_ERROR_MESSAGE, EMAIL_REQUIRED_ERROR_MESSAGE, FIRSTNAME_MAX_LENGTH_ERROR_MESSAGE, FIRSTNAME_MIN_LENGTH_ERROR_MESSAGE, FIRSTNAME_REQUIRED_ERROR_MESSAGE, LASTNAME_MAX_LENGTH_ERROR_MESSAGE, LASTNAME_MIN_LENGTH_ERROR_MESSAGE, LASTNAME_REQUIRED_ERROR_MESSAGE, USERNAME_DUPLICATE_ERROR_MESSAGE, USERNAME_MAX_LENGTH_ERROR_MESSAGE, USERNAME_MIN_LENGTH_ERROR_MESSAGE, USERNAME_REQUIRED_ERROR_MESSAGE } from '../../constants/errors.constants';
+import { ErrorService } from 'src/app/core/services/errors.service';
 
 @Component({
   selector: 'app-user-form',
@@ -41,6 +42,11 @@ export class UserFormComponent {
   fetchingFromBackend: boolean = false;
 
   /**
+   * Flag set to indicate that there was a backend API error
+   */
+  backendErrorOccurred: boolean = false;
+
+  /**
    * Object containing all form error messages to be sent to the client
    */
   errorMessages = {
@@ -56,12 +62,12 @@ export class UserFormComponent {
       "duplicate": EMAIL_DUPLICATE_ERROR_MESSAGE,
     },
     "firstName": {
-      "required":  FIRSTNAME_REQUIRED_ERROR_MESSAGE,
+      "required": FIRSTNAME_REQUIRED_ERROR_MESSAGE,
       "minlength": FIRSTNAME_MIN_LENGTH_ERROR_MESSAGE,
       "maxlength": FIRSTNAME_MAX_LENGTH_ERROR_MESSAGE,
     },
     "lastName": {
-      "required":  LASTNAME_REQUIRED_ERROR_MESSAGE,
+      "required": LASTNAME_REQUIRED_ERROR_MESSAGE,
       "minlength": LASTNAME_MIN_LENGTH_ERROR_MESSAGE,
       "maxlength": LASTNAME_MAX_LENGTH_ERROR_MESSAGE,
     },
@@ -74,7 +80,7 @@ export class UserFormComponent {
   /**
    * Key value pair collection containing our form input FormControls
    */
-  formControls: { [key: string]: FormControl<any>} = {
+  formControls: { [key: string]: FormControl<any> } = {
     "username": new FormControl('', [
       Validators.required,
       Validators.minLength(MIN_USERNAME_LENGTH),
@@ -112,7 +118,7 @@ export class UserFormComponent {
    */
   currentStatus: string = this.userStatuses[0].key;
 
-  constructor(private backendService: BackendService) {}
+  constructor(private backendService: BackendService, private errorService: ErrorService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['user']?.currentValue) {
@@ -132,7 +138,7 @@ export class UserFormComponent {
    */
   onDelete(): void {
     if (this.user) {
-      if(confirm(`Are you sure you want to delete ${this.user.Username}`)) {
+      if (confirm(`Are you sure you want to delete ${this.user.Username}`)) {
         this.fetchingFromBackend = true;
 
         const id = this.user.UserId;
@@ -174,11 +180,13 @@ export class UserFormComponent {
       this.backendService.updateUser(userData).subscribe({
         next: user => this.onBackendSuccess(user),
         error: err => this.onBackendError(err),
+        complete: () => this.onBackendComplete(),
       })
     } else {
       this.backendService.createUser(userData).subscribe({
         next: user => this.onBackendSuccess(user),
         error: err => this.onBackendError(err),
+        complete: () => this.onBackendComplete(),
       })
     }
   }
@@ -194,24 +202,37 @@ export class UserFormComponent {
   }
 
   /**
-   * Handles an errors that may have come from the backend during our request
+   * Handles any errors that may have come from the backend during our request
    * @param err Error returned from backend API
    */
   onBackendError(err: any): void {
+    this.fetchingFromBackend = false;
+
+    // If an error property is returned we assume this is specified from our Backend
+    // and we handle it accordingly
     if (err.error) {
       const code = err.error.error_code;
-      const msg = err.error.error_message;
 
       switch (code) {
         case 10003:
-          this.formControls['username'].setErrors({'duplicate': true})
-          break;
+          this.formControls['username'].setErrors({ 'duplicate': true })
+          return;
         case 10004:
-          this.formControls['email'].setErrors({'duplicate': true})
-          break;
+          this.formControls['email'].setErrors({ 'duplicate': true })
+          return;
       }
-    }
+    } 
 
+    this.errorService.showError(
+      BACKEND_API_USERS_FAILED_MESSAGE,
+      BACKEND_API_USERS_FAILED_ACTION);
+  }
+
+  /**
+   * Handler that fires after the observable for the backend API call completes
+   */
+  onBackendComplete(): void {
+    this.backendErrorOccurred = false;
     this.fetchingFromBackend = false;
   }
 
@@ -247,7 +268,7 @@ export class UserFormComponent {
         this.formControls["department"].value || "",
       )
       return user;
-    } catch(err) {
+    } catch (err) {
       console.error(`Failed to map User form data to a User. ${err}`);
     }
 

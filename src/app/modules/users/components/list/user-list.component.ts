@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { BackendService } from '../../../../core/services/backend.service';
 import { User } from '../../../../core/models/users.model';
 import { USER_STATUSES } from '../../../../core/constants/backend-api.constants';
+import { BACKEND_API_USERS_FAILED_ACTION, BACKEND_API_USERS_FAILED_MESSAGE } from '../../constants/errors.constants';
+import { ErrorService } from 'src/app/core/services/errors.service';
 
 @Component({
   selector: 'app-user-list',
@@ -20,7 +22,12 @@ export class UserListComponent {
    */
   fetchingFromBackend: boolean = false;
 
-  constructor(private backendService: BackendService) { }
+  /**
+   * Flag set to indicate that there was a backend API error
+   */
+  backendErrorOccurred: boolean = false;
+
+  constructor(private backendService: BackendService, private errorService: ErrorService) { }
 
   ngOnInit(): void {
     this.fetchingFromBackend = true;
@@ -32,15 +39,41 @@ export class UserListComponent {
    */
   fetchUsers(): void {
     this.backendService.getAllUsers().subscribe({
-      next: value => this.users = value,
-      error: err => {
-        // Errors won't make it to the complete callback so we have
-        // to set this flag here
-        this.fetchingFromBackend = false
-        console.error(`Error while fetching users: ${err}`);
-      },
-      complete: () => this.fetchingFromBackend = false
+      next: users => this.onBackendSuccess(users),
+      error: err => this.onBackendError(err),
+      complete: () => this.onBackendComplete()
     })
+  }
+
+  /**
+ * Takes the output of the backend response and stores them for display
+ * @param user Users data returned from backend API
+ */
+  onBackendSuccess(users: User[]): void {
+    this.users = users;
+  }
+
+  /**
+   * Handles any errors that may have come from the backend during our request
+   * @param err Error returned from backend API
+   */
+  onBackendError(err: any): void {
+    // Errors won't make it to the complete callback so we have
+    // to set this flag here
+    this.fetchingFromBackend = false
+    this.errorService.showError(
+      BACKEND_API_USERS_FAILED_MESSAGE,
+      BACKEND_API_USERS_FAILED_ACTION);
+
+    console.error(`Error while fetching users: ${err.message}`);
+  }
+
+  /**
+   * Handler that fires after the observable for the backend API call completes
+   */
+  onBackendComplete(): void {
+    this.backendErrorOccurred = false;
+    this.fetchingFromBackend = false;
   }
 
   /**
@@ -71,7 +104,7 @@ export class UserListComponent {
    * @param statusKey Character key for the status
    * @returns Status string
    */
-  getUserStatus(statusKey: string) : string | undefined { 
+  getUserStatus(statusKey: string): string | undefined {
     return USER_STATUSES.find(s => s.key === statusKey)?.value
   }
 }

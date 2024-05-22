@@ -13,20 +13,23 @@ import { MatButtonModule } from '@angular/material/button';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TEST_USERS } from '../../../../core/constants/test-data.constants';
 import { By } from '@angular/platform-browser';
-import { EMAIL_INVALID_ERROR_MESSAGE, EMAIL_REQUIRED_ERROR_MESSAGE, USERNAME_MAX_LENGTH_ERROR_MESSAGE, USERNAME_MIN_LENGTH_ERROR_MESSAGE, USERNAME_REQUIRED_ERROR_MESSAGE } from '../../constants/errors.constants';
+import { BACKEND_API_USERS_FAILED_ACTION, BACKEND_API_USERS_FAILED_MESSAGE, EMAIL_INVALID_ERROR_MESSAGE, EMAIL_REQUIRED_ERROR_MESSAGE, USERNAME_MAX_LENGTH_ERROR_MESSAGE, USERNAME_MIN_LENGTH_ERROR_MESSAGE, USERNAME_REQUIRED_ERROR_MESSAGE } from '../../constants/errors.constants';
+import { ErrorService } from 'src/app/core/services/errors.service';
 
 describe('UserFormComponent', () => {
   let component: UserFormComponent;
   let fixture: ComponentFixture<UserFormComponent>;
   let backendServiceSpy: jasmine.SpyObj<BackendService>;
+  let errorServiceSpy: jasmine.SpyObj<ErrorService>;
   let testUser: User;
 
   beforeEach(async () => {
-    const spy = jasmine.createSpyObj('BackendService', [
+    const backendSpy = jasmine.createSpyObj('BackendService', [
       'createUser',
       'updateUser',
       'deleteUser',
     ]);
+    const errorSpy = jasmine.createSpyObj('ErrorService', ['showError'])
     await TestBed.configureTestingModule({
       declarations: [UserFormComponent],
       imports: [
@@ -38,13 +41,16 @@ describe('UserFormComponent', () => {
         MatIconModule,
         MatButtonModule,
         ReactiveFormsModule,
-        NoopAnimationsModule,
+        NoopAnimationsModule
       ],
-      providers: [{ provide: BackendService, useValue: spy }],
+      providers: [{ provide: BackendService, useValue: backendSpy }, { provide: ErrorService, useValue: errorSpy}],
     }).compileComponents();
     backendServiceSpy = TestBed.inject(
       BackendService
     ) as jasmine.SpyObj<BackendService>;
+    errorServiceSpy = TestBed.inject(
+      ErrorService
+    ) as jasmine.SpyObj<ErrorService>;
   });
 
   beforeEach(() => {
@@ -113,59 +119,75 @@ describe('UserFormComponent', () => {
 
     expect(component.formControls['username'].hasError('duplicate')).toBeTrue();
     expect(component.fetchingFromBackend).toBeFalse();
+    expect(errorServiceSpy.showError).not.toHaveBeenCalled();
   });
 
   it('should set email error when backend service returns duplicate email error', () => {
     const errorResponse = { error: { error_code: 10004 } };
-    backendServiceSpy.updateUser.and.returnValue(throwError(errorResponse));
+    backendServiceSpy.updateUser.and.returnValue(throwError(() => errorResponse));
 
     component.onSubmit();
 
     expect(component.formControls['email'].hasError('duplicate')).toBeTrue();
     expect(component.fetchingFromBackend).toBeFalse();
+    expect(errorServiceSpy.showError).not.toHaveBeenCalled();
   });
-  
+
+  it('should show error message to the client if it is a non-validation type error', () => {
+    const errorResponse = { error: { error_code: 15555 } };
+    backendServiceSpy.updateUser.and.returnValue(throwError(() => errorResponse));
+
+    component.onSubmit();
+
+    expect(component.formControls['username'].hasError('duplicate')).toBeFalse();
+    expect(component.formControls['email'].hasError('duplicate')).toBeFalse();
+    expect(component.fetchingFromBackend).toBeFalse();
+    expect(errorServiceSpy.showError).toHaveBeenCalledWith(
+      BACKEND_API_USERS_FAILED_MESSAGE,
+      BACKEND_API_USERS_FAILED_ACTION);
+  });
+
   it('should not call backend service to delete user when user cancels deletion', () => {
     component.user = testUser;
-  
+
     spyOn(window, 'confirm').and.returnValue(false);
-  
+
     component.onDelete();
-  
+
     expect(window.confirm).toHaveBeenCalled();
     expect(backendServiceSpy.deleteUser).not.toHaveBeenCalled();
   });
-  
+
   it('should emit userDeletedEvent when backend service returns true after deleting user', () => {
     component.user = testUser;
-  
+
     spyOn(window, 'confirm').and.returnValue(true);
     const deleteObservable = of(true);
     backendServiceSpy.deleteUser.and.returnValue(deleteObservable);
     spyOn(component.userDeletedEvent, 'emit');
-  
+
     component.onDelete();
-  
+
     expect(component.userDeletedEvent.emit).toHaveBeenCalledWith(testUser.UserId);
   });
-  
+
   it('should not emit userDeletedEvent when backend service returns false after deleting user', () => {
     component.user = testUser;
-  
+
     spyOn(window, 'confirm').and.returnValue(true);
     const deleteObservable = of(false);
     backendServiceSpy.deleteUser.and.returnValue(deleteObservable);
     spyOn(component.userDeletedEvent, 'emit');
-  
+
     component.onDelete();
-  
+
     expect(component.userDeletedEvent.emit).not.toHaveBeenCalled();
   });
 
   describe('input form validation cases', () => {
-    for (const {inputField, inputElemId, inputVal, errorElemId, expectedErrorMessage, errorType} of [
+    for (const { inputField, inputElemId, inputVal, errorElemId, expectedErrorMessage, errorType } of [
       // Username error validations
-      { 
+      {
         inputField: 'username',
         inputElemId: '#username-input',
         inputVal: '',
@@ -173,7 +195,7 @@ describe('UserFormComponent', () => {
         expectedErrorMessage: USERNAME_REQUIRED_ERROR_MESSAGE,
         errorType: 'input is not supplied'
       },
-      { 
+      {
         inputField: 'username',
         inputElemId: '#username-input',
         inputVal: 'q',
@@ -181,7 +203,7 @@ describe('UserFormComponent', () => {
         expectedErrorMessage: USERNAME_MIN_LENGTH_ERROR_MESSAGE,
         errorType: 'input is too short'
       },
-      { 
+      {
         inputField: 'username',
         inputElemId: '#username-input',
         inputVal: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
@@ -190,7 +212,7 @@ describe('UserFormComponent', () => {
         errorType: 'input is too long'
       },
       // Email error validations
-      { 
+      {
         inputField: 'email',
         inputElemId: '#email-input',
         inputVal: '',
@@ -198,7 +220,7 @@ describe('UserFormComponent', () => {
         expectedErrorMessage: EMAIL_REQUIRED_ERROR_MESSAGE,
         errorType: 'input is not supplied'
       },
-      { 
+      {
         inputField: 'email',
         inputElemId: '#email-input',
         inputVal: 'bad@e',
@@ -213,9 +235,9 @@ describe('UserFormComponent', () => {
         inputElem.value = inputVal;
         inputElem.dispatchEvent(new Event('input'));
         inputElem.dispatchEvent(new Event('blur'));
-        
+
         fixture.detectChanges();
-    
+
         const errorMessageDebugElement = fixture.debugElement.query(By.css(errorElemId));
         expect(errorMessageDebugElement).toBeTruthy();
         expect(errorMessageDebugElement.nativeElement.textContent).toContain(expectedErrorMessage);

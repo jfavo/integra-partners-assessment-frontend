@@ -19,3 +19,6 @@ export const LASTNAME_MAX_LENGTH_ERROR_MESSAGE: string = `Last name can only be 
 
 export const DEPARTMENT_MIN_LENGTH_ERROR_MESSAGE: string = `Department needs to be at least ${MIN_NAME_LENGTH} characters long.`;
 export const DEPARTMENT_MAX_LENGTH_ERROR_MESSAGE: string = `Department can only be ${MAX_INPUT_LENGTH} characters long.`;
+
+export const BACKEND_API_USERS_FAILED_MESSAGE: string = 'There was an unexpected error. Please try again later.';
+export const BACKEND_API_USERS_FAILED_ACTION: string = 'Acknowledge';
