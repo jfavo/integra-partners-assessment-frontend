@@ -1,9 +1,9 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { UserFormComponent } from './user-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { BackendService } from '../../../../shared/services/backend.service';
+import { BackendService } from '../../../../core/services/backend.service';
 import { of, throwError } from 'rxjs';
-import { User } from '../../models/users.model';
+import { User } from '../../../../core/models/users.model';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -11,7 +11,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { TEST_USERS } from 'src/app/shared/constants/test-data.constants';
+import { TEST_USERS } from '../../../../core/constants/test-data.constants';
 import { By } from '@angular/platform-browser';
 import { EMAIL_INVALID_ERROR_MESSAGE, EMAIL_REQUIRED_ERROR_MESSAGE, USERNAME_MAX_LENGTH_ERROR_MESSAGE, USERNAME_MIN_LENGTH_ERROR_MESSAGE, USERNAME_REQUIRED_ERROR_MESSAGE } from '../../constants/errors.constants';
 

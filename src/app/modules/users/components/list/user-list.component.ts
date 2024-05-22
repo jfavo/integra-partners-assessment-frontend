@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { BackendService } from 'src/app/shared/services/backend.service';
-import { User } from '../../models/users.model';
-import { USER_STATUSES } from 'src/app/shared/constants/backend-api.constants';
+import { BackendService } from '../../../../core/services/backend.service';
+import { User } from '../../../../core/models/users.model';
+import { USER_STATUSES } from '../../../../core/constants/backend-api.constants';
 
 @Component({
   selector: 'app-user-list',

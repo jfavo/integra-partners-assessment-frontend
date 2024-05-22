@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { User } from '../../models/users.model';
+import { User } from '../../../../core/models/users.model';
 
 @Component({
   selector: 'app-user-create-page',

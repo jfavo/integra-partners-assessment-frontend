@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { BackendService } from './backend.service';
-import { User } from '../../core/users/models/users.model';
+import { User } from '../models/users.model';
 import { BACKEND_API_USERS_PATH } from '../constants/backend-api.constants';
 import { TEST_USERS } from '../constants/test-data.constants';
 

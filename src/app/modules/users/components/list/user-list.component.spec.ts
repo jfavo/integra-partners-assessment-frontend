@@ -1,14 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { UserListComponent } from './user-list.component';
-import { BackendService } from '../../../../shared/services/backend.service';
+import { BackendService } from '../../../../core/services/backend.service';
 import { of, throwError } from 'rxjs';
-import { User } from '../../models/users.model';
+import { User } from '../../../../core/models/users.model';
 import { UserFormComponent } from '../user-form/user-form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { TEST_USERS } from 'src/app/shared/constants/test-data.constants';
+import { TEST_USERS } from '../../../../core/constants/test-data.constants';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';

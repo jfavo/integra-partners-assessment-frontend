@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
-import { User } from '../../core/users/models/users.model';
+import { map } from 'rxjs/operators';
+import { User } from '../models/users.model';
 import { BACKEND_API_USERS_PATH } from '../constants/backend-api.constants';
 
 @Injectable({

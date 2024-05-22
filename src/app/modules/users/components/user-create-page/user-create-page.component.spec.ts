@@ -1,17 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserCreatePageComponent } from './user-create-page.component';
-import { HttpClientModule } from '@angular/common/http';
 import { UserFormComponent } from '../user-form/user-form.component';
 import { Router, RouterModule } from '@angular/router';
-import { BackendService } from 'src/app/shared/services/backend.service';
+import { BackendService } from '../../../../core/services/backend.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { TEST_USERS } from 'src/app/shared/constants/test-data.constants';
 import { RouterTestingModule } from '@angular/router/testing';
 
 describe('UserCreatePageComponent', () => {

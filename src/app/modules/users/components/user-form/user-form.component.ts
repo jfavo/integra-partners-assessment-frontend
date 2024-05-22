@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { User } from '../../models/users.model';
-import { BackendService } from 'src/app/shared/services/backend.service';
-import { USER_STATUSES } from 'src/app/shared/constants/backend-api.constants';
+import { User } from '../../../../core/models/users.model';
+import { BackendService } from '../../../../core/services/backend.service';
+import { USER_STATUSES } from '../../../../core/constants/backend-api.constants';
 import { MAX_INPUT_LENGTH, MIN_NAME_LENGTH, MIN_USERNAME_LENGTH } from '../../constants/form.constants';
 import { DEPARTMENT_MAX_LENGTH_ERROR_MESSAGE, DEPARTMENT_MIN_LENGTH_ERROR_MESSAGE, EMAIL_DUPLICATE_ERROR_MESSAGE, EMAIL_INVALID_ERROR_MESSAGE, EMAIL_REQUIRED_ERROR_MESSAGE, FIRSTNAME_MAX_LENGTH_ERROR_MESSAGE, FIRSTNAME_MIN_LENGTH_ERROR_MESSAGE, FIRSTNAME_REQUIRED_ERROR_MESSAGE, LASTNAME_MAX_LENGTH_ERROR_MESSAGE, LASTNAME_MIN_LENGTH_ERROR_MESSAGE, LASTNAME_REQUIRED_ERROR_MESSAGE, USERNAME_DUPLICATE_ERROR_MESSAGE, USERNAME_MAX_LENGTH_ERROR_MESSAGE, USERNAME_MIN_LENGTH_ERROR_MESSAGE, USERNAME_REQUIRED_ERROR_MESSAGE } from '../../constants/errors.constants';
 
@@ -142,7 +142,7 @@ export class UserFormComponent {
               this.userDeletedEvent.emit(id)
             }
           },
-          error: (err) => this.onBackendError(err),
+          error: err => this.onBackendError(err),
           complete: () => this.fetchingFromBackend = true
         })
 
