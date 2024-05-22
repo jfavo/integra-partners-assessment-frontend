@@ -12,48 +12,6 @@ export class BackendService {
   constructor(private http: HttpClient) {}
 
   /**
-   * Maps our user data from its JSON format to a User model
-   * @param data JSON response data
-   * @returns User model
-   */
-  mapUserResponseToUser(data: {
-    user_id: Number;
-    user_name: string;
-    first_name: string;
-    last_name: string;
-    email: string;
-    user_status: string;
-    department: string;
-  }): User {
-    return new User(
-      data.user_id,
-      data.user_name,
-      data.first_name,
-      data.last_name,
-      data.email,
-      data.user_status,
-      data.department
-    );
-  }
-
-  /**
-   * Maps a User object to a JSON object that our backend API expects
-   * @param user User object to be mapped to a JSON object
-   * @returns JSON object
-   */
-  mapUserToRequestBody(user: User): any {
-    return {
-        "user_id": user.UserId,
-        "first_name": user.Firstname,
-        "last_name": user.Lastname,
-        "user_name": user.Username,
-        "email": user.Email,
-        "user_status": user.UserStatus,
-        "department": user.Department
-    }
-  }
-
-  /**
    * Fetches all users from the backend API
    * @returns An Observable emitting an array of Users
    */
@@ -116,5 +74,48 @@ export class BackendService {
             return response.data === userId
         })
     );
+  }
+
+  
+  /**
+   * Maps our user data from its JSON format to a User model
+   * @param data JSON response data
+   * @returns User model
+   */
+  mapUserResponseToUser(data: {
+    user_id: Number;
+    user_name: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    user_status: string;
+    department: string;
+  }): User {
+    return new User(
+      data.user_id,
+      data.user_name,
+      data.first_name,
+      data.last_name,
+      data.email,
+      data.user_status,
+      data.department
+    );
+  }
+
+  /**
+   * Maps a User object to a JSON object that our backend API expects
+   * @param user User object to be mapped to a JSON object
+   * @returns JSON object
+   */
+  mapUserToRequestBody(user: User): any {
+    return {
+        "user_id": user.UserId,
+        "first_name": user.Firstname,
+        "last_name": user.Lastname,
+        "user_name": user.Username,
+        "email": user.Email,
+        "user_status": user.UserStatus,
+        "department": user.Department
+    }
   }
 }
