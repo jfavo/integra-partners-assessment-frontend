@@ -34,9 +34,6 @@ import { UserCreatePageComponent } from './components/user-create-page/user-crea
     ReactiveFormsModule,
     MatProgressSpinnerModule
   ],
-  exports: [
-    UserListComponent
-  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class UsersModule { }

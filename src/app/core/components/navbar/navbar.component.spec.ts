@@ -4,6 +4,7 @@ import { NavbarComponent } from './navbar.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { NAV_CREATE_USER_ROUTE, NAV_USERS_LIST_ROUTE } from '../../constants/nav-routes.constants';
+import { CoreModule } from '../../core.module';
 
 describe('NavbarComponent', () => {
   let component: NavbarComponent;
@@ -12,7 +13,7 @@ describe('NavbarComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [NavbarComponent, RouterTestingModule]
+      imports: [CoreModule, RouterTestingModule]
     });
     fixture = TestBed.createComponent(NavbarComponent);
     component = fixture.componentInstance;

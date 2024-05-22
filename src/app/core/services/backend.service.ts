@@ -6,7 +6,7 @@ import { User } from '../models/users.model';
 import { BACKEND_API_USERS_PATH } from '../constants/backend-api.constants';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'platform',
 })
 export class BackendService {
   constructor(private http: HttpClient) {}

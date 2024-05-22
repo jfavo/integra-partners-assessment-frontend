@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { CoreModule } from 'src/app/core/core.module';
 
 describe('UserCreatePageComponent', () => {
   let component: UserCreatePageComponent;
@@ -28,7 +29,7 @@ describe('UserCreatePageComponent', () => {
         MatInputModule,
         NoopAnimationsModule,
         RouterTestingModule,
-        MatSnackBarModule
+        CoreModule
       ],
       declarations: [UserCreatePageComponent, UserFormComponent],
       providers: [RouterModule, BackendService],

@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { MatSnackBar, MatSnackBarRef, TextOnlySnackBar } from "@angular/material/snack-bar";
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'platform',
 })
 export class ErrorService {
     /**

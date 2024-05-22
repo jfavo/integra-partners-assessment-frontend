@@ -3,10 +3,11 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './core/components/navbar/navbar.component';
+import { CoreModule } from './core/core.module';
 
 describe('AppComponent', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    imports: [RouterTestingModule, HttpClientModule, NavbarComponent],
+    imports: [RouterTestingModule, CoreModule],
     declarations: [AppComponent]
   }));
 
